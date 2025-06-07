@@ -1,5 +1,3 @@
-
-
 # Celebrity Name Chain
 
 This project finds *celebrity name chains*—sequences of names where the **last name of one celebrity is the first name of the next**, forming either linear chains or loops. For example:
@@ -78,22 +76,20 @@ celebrity-name-chain
 │   ├── NationalReadMe.pdf
 │   ├── yob1880.txt
 │   ├── yob1881.txt
-│   ├── yob1882.txt
 │   ├── ...
-│   ├── yob2022.txt
-│   ├── yob2023.txt
 │   └── yob2024.txt
 ├── outputs                            # Precomputed name lists and frequencies
 │   ├── celebrity_list_all.json
 │   ├── celebrity_list_cleaned.json
 │   └── letter_counts.json
 ├── src                                # Core Python scripts
-│   ├── clean_name_list.py
-│   ├── config.py
-│   ├── create_name_chains.py
-│   ├── get_celebrity_names.py
-│   ├── get_letter_counts.py
-│   └── main.py              
+│   ├── clean_name_list.py             # Step 3 (optional)
+│   ├── config.py                      # Preliminaries
+│   ├── create_name_chains.py          # Step 4
+│   ├── get_celebrity_names.py         # Step 2 (optional)
+│   ├── get_letter_counts.py           # Step 1 (optional)
+│   ├── create_chains.py               # Terminal entry point
+│   └── create_chains_master.py        # Python entry point
 ├── .gitignore
 ├── requirements.txt
 └── README.md
