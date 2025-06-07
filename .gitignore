@@ -1,0 +1,46 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.manifest
+*.spec
+
+# === Virtual Environment ===
+.venv/
+venv/
+ENV/
+env/
+
+# === IDEs & Editors ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# === Jupyter Notebook Checkpoints ===
+.ipynb_checkpoints/
+
+# === macOS ===
+.DS_Store
+
+# === Windows ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === Logs and Debugging ===
+*.log
+*.tmp
+
+# === JSON/Output Files ===
+# outputs/*.json
+
+# === Specific Local Files ===
+/get-tree.py
