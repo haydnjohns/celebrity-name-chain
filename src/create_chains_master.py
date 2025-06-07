@@ -23,9 +23,9 @@ raw_celebrity_list_input = celebrity_list_output_json  # reusing scraped output
 
 celebrity_list_path = cleaned_celebrity_output  # for chaining
 chain_type = "loop"  # "chain" or "loop"
-min_length = 3
-max_length = 5
-max_chains_per_length = 2
+min_length = 8
+max_length = 8
+max_chains_per_length = 20
 
 # === STEP FUNCTIONS === #
 
