@@ -31,35 +31,31 @@ def parse_names(names_list):
 
 def build_graph_and_connectivity(parsed_names):
     """
-    Builds the directed graph and calculates node connectivity in a single pass.
-    OPTIMIZATION: Merged graph building and connectivity calculation to reduce loops.
+    Builds a directed graph and tracks in/out-degree for each name.
+    Now returns:
+    - graph: outgoing connections (edges)
+    - in_degree: how many times a name is targeted
+    - out_degree: how many times a name points to others
     """
     graph = defaultdict(list)
-    connectivity = defaultdict(int)
-
-    # Map first names to the full names of the people who have them.
+    in_degree = defaultdict(int)
+    out_degree = defaultdict(int)
     by_first = defaultdict(list)
+
+    # Group names by first name
     for first, _, full_name in parsed_names:
         by_first[first].append(full_name)
 
-    # Build the graph by linking last names to first names.
+    # Build the graph and count degrees
     for _, last, full_name in parsed_names:
-        # full_name -> successor
-        # A's last name matches B's first name.
         if last in by_first:
             for successor_full_name in by_first[last]:
                 if full_name != successor_full_name:
                     graph[full_name].append(successor_full_name)
-                    # OPTIMIZATION: Calculate connectivity during graph creation.
-                    connectivity[full_name] += 1  # Out-degree
-                    connectivity[successor_full_name] += 1  # In-degree
+                    out_degree[full_name] += 1
+                    in_degree[successor_full_name] += 1
 
-    # Ensure all names are in the connectivity map, even if they have 0 connections.
-    for _, _, full_name in parsed_names:
-        if full_name not in connectivity:
-            connectivity[full_name] = 0
-
-    return graph, connectivity
+    return graph, in_degree, out_degree
 
 
 def _find_paths_recursive(graph, node, length, path, visited, results, target_count, is_loop=False,
@@ -150,12 +146,21 @@ def create_name_chains(celebrity_list_path, chain_type, min_length, max_length, 
 
     print(f"Loaded {len(celebrity_names)} celebrity names")
 
-    # --- MAJOR OPTIMIZATION: Parse names and build the graph only ONCE ---
     parsed_names = parse_names(celebrity_names)
-    graph, connectivity = build_graph_and_connectivity(parsed_names)
+    graph, in_degree, out_degree = build_graph_and_connectivity(parsed_names)
 
-    # Sort names by connectivity once to prioritize searching from well-connected nodes.
-    sorted_names = sorted(parsed_names, key=lambda x: connectivity.get(x[2], 0), reverse=True)
+    # TRIM: Keep only names that have at least one incoming and one outgoing connection
+    connected_names = [
+        entry for entry in parsed_names
+        if in_degree.get(entry[2], 0) > 0 and out_degree.get(entry[2], 0) > 0
+    ]
+
+    # Sort by total connectivity (in + out)
+    sorted_names = sorted(
+        connected_names,
+        key=lambda x: in_degree.get(x[2], 0) + out_degree.get(x[2], 0),
+        reverse=True
+    )
 
     print(Fore.GREEN + f"\nGraph has been built. Starting search...")
 
